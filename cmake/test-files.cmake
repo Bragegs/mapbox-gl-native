@@ -86,6 +86,7 @@ set(MBGL_TEST_FILES
     # util
     test/util/async_task.cpp
     test/util/geo.cpp
+    test/util/http_timeout.cpp
     test/util/image.cpp
     test/util/mapbox.cpp
     test/util/memory.cpp

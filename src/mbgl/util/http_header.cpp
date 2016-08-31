@@ -28,6 +28,24 @@ CacheControl CacheControl::parse(const std::string& value) {
 optional<Timestamp> CacheControl::toTimePoint() const {
     return maxAge ? util::now() + Seconds(*maxAge) : optional<Timestamp>{};
 }
+    
+optional<Timestamp> parseRetryHeaders(const optional<std::string>& retryAfter,
+                                      const optional<std::string>& xRateLimitReset) {
+    optional<Timestamp> result;
+    
+    if(retryAfter) {
+        try {
+            auto secs = std::chrono::seconds(std::stoi(*retryAfter));
+            result = std::chrono::time_point_cast<Seconds>(std::chrono::system_clock::now() + secs);
+        } catch (std::invalid_argument) {
+            result = util::parseTimestamp((*retryAfter).c_str());
+        }
+    } else if(xRateLimitReset) {
+        result = util::parseTimestamp(std::stoi(*xRateLimitReset));
+    }
+    
+    return result;
+}
 
 } // namespace http
 } // namespace mbgl
