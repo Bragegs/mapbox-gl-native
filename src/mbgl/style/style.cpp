@@ -447,12 +447,12 @@ void Style::onSourceError(Source& source, std::exception_ptr error) {
     observer->onResourceError(error);
 }
 
-void Style::onTileLoaded(Source& source, const OverscaledTileID& tileID, bool isNewTile) {
-    if (isNewTile) {
+void Style::onTileLoaded(Source& source, const OverscaledTileID& tileID, TileLoadState loadState) {
+    if (loadState == TileLoadState::First) {
         shouldReparsePartialTiles = true;
     }
 
-    observer->onTileLoaded(source, tileID, isNewTile);
+    observer->onTileLoaded(source, tileID, loadState);
     observer->onNeedsRepaint();
 }
 

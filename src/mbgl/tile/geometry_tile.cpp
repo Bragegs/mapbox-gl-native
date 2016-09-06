@@ -67,7 +67,7 @@ void GeometryTile::setData(std::unique_ptr<const GeometryTileData> data_) {
         availableData = DataAvailability::All;
         buckets.clear();
         redoPlacement();
-        observer->onTileLoaded(*this, true);
+        observer->onTileLoaded(*this, TileLoadState::First);
         return;
     }
 
@@ -102,7 +102,7 @@ void GeometryTile::setData(std::unique_ptr<const GeometryTileData> data_) {
             }
 
             redoPlacement();
-            observer->onTileLoaded(*this, true);
+            observer->onTileLoaded(*this, TileLoadState::First);
         } else {
             availableData = DataAvailability::All;
             observer->onTileError(*this, result.get<std::exception_ptr>());
@@ -140,7 +140,7 @@ bool GeometryTile::parsePending() {
             }
 
             redoPlacement();
-            observer->onTileLoaded(*this, false);
+            observer->onTileLoaded(*this, TileLoadState::Subsequent);
         } else {
             availableData = DataAvailability::All;
             observer->onTileError(*this, result.get<std::exception_ptr>());
